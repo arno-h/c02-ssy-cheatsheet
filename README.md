@@ -30,7 +30,7 @@
 * **Where**
   * `collection.where(function)` ... Liefert alle Objekte zurück, bei denen *function* *true* retourniert;
     Beispiel:
-    ```
+    ```javascript
     collection.where(hat4Beine);
     function hat4Beine(obj) { return (obj.beine == 4); }
     ```
