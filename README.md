@@ -38,9 +38,17 @@
 
 ## Request 
 
-* **GET**: 
+* **GET/DELETE**: 
   ```javascript
   Request.get(urlVar, responseFunction);
+  // In der Reponse-Funktion muss der body mit JSON.parse() eingelesen werden
+
+  // Alternativ (dann wird body automatisch geparst)
+  Request.get({
+      url: urlVar,
+      json: true
+    },
+    responseFunction);
   ```
 * **POST/PUT/PATCH**: (wenn also Daten mitübergeben werden müssen)
   ```javascript
