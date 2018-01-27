@@ -77,7 +77,7 @@
 * Routen-Funktion
   ```javascript
   function routeFunction(request, response) {
-    let x = request.param.varName;   // selber Name wie in Route
+    let x = request.params.varName;   // selber Name wie in Route
     let y = request.query.queryName; // für http://...?queryName=123
     let z = request.body.bodyName;   // für JSON-Daten im Body
     ...
