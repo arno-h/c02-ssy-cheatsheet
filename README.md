@@ -8,16 +8,30 @@
 * **Array**
   * `[1, 2, 3]` ... Definition eines neuen Arrays
   * `[]` ... leeres Array
+  * `arrVar.length` ... Länge eines Arrays
   * `arrVar.push(var)`  ... fügt *var* am Ende des Arrays *arrVar* hinzu
   * `arrVar.shift()` ... entfernt erstes Element aus Array und retourniert dieses
   * `arrVar.includes(var)` ... *true*/*false*, ob die Variable im Array enthalten ist
-  * `arrVar.sort([fun])` ... sortiert das Array; falls Funktion *fun* übergeben, dann sortiert anhand der Return-Werte (`<0`,`0`,`>0`) von *fun*
+  * `arrVar.sort([fun])` ... sortiert das Array; falls Funktion *fun* übergeben,
+                             dann sortiert anhand der Return-Werte (`<0`,`0`,`>0`) von *fun*
   * `arrVar.map(fun)`  ... führt die Funktion *fun* für jedes einzelne Element des Arrays aus
-* **Objekt** ()bzw. Key-/Value-Map)
+* **Objekt** (bzw. Key-/Value-Map)
   * `{ key1: "Wert1", key2: 7, key3: true }` ... Definition eines neuen Objekts
+  * `{}` ... leeres Objekt
   * `var.key` ... mit Punkt auf Methoden und Attribute zugreifen
+  * `var[key]` ... alternativ mit Array-Notation auf Attribute zugreifen
   * `var.key = undefined` ... Wert aus Objekt entfernen/löschen
-
+  * `Object.keys(var)` ... retourniert Array aller Keys des Objekts
+* **Einige Tests**:
+  * Existiert eine Variable? `typeof var !== "undefined"`
+  * Array leer? `arrVar.length === 0`
+  * Existiert Objektattribut (Key)? `"key" in var` oder `typeof var.key !== "undefined"`
+* **Schleifen**:
+  * `for (let i = 0; i < arrVar.length; i++) { let value=arrVar[i]; ... }`
+  * `for (let value of arrVar) { ... }` ... weist den Wert direkt der Variable zu
+  * `for {let key in object) { let value=object[key] }` zur Iteration über Objekt-Attribute (Keys)
+    (Gefährlich: listet auch geerbte Properties/Keys auf!)
+  
 ### Verschachtelung
 
 Manchmal ist es notwendig, Variablen über Request-Grenzen hinweg weiterzureichen.
@@ -45,8 +59,18 @@ function func1(param1) {
 ```
 
 (Anmerkung: Da bei größeren Programmen die Verschachtelung stark zunehmen kann, haben sich im NodeJS-Ökosystem
-einige alternative Techniken etabliert: async, promises etc. Für unsere Beispiele haben wir aber so
+einige alternative Techniken etabliert: async, Promises etc. Für unsere Beispiele haben wir aber so
 gut wie nie eine größere Verschachtelungstiefe, weshalb wir diese zusätzlichen Bibliotheken nicht verwenden.)
+
+
+## JSON
+
+Javascript ist die Muttersprache von JSON, weshalb die Notation auch so ähnlich aussieht.
+Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeichen >"< gesetzt.
+
+* `let var = JSON.parse(string)` ... dekodiert einen String und retourniert den Wert
+                                     (kann Objekt, Array, Bool, String etc. sein)
+* `let string = JSON.stringify(var)` ... erzeugt einen JSON-String aus einer Variable 
 
 
 ## LokiJS-Datenbank
@@ -58,7 +82,7 @@ gut wie nie eine größere Verschachtelungstiefe, weshalb wir diese zusätzliche
   * `collection.insert(var)` ... Eintrag in Kollektion einfügen (erhält dann DB-Meta-Attribute)
   * `collection.remove(var)` ... Eintrag auf Kollektion löschen
     (muss Objekt selbst sein, keine ID → vorher mit `.get()` Objekt aus DB holen)
-  * Werden nur einzelne Werte eines Objektes aktualisiert (das mit `get()` geholt wurde), ist kein *save* oder *update* notwendig.
+  * `collection.update(var)` ... Eintrag einer Kollektion aktualisieren (Objekte vorher mit `get()` auslesen)
 * **Where**
   * `collection.where(function)` ... Liefert alle Objekte zurück, bei denen *function* *true* retourniert;
     Beispiel:
@@ -93,8 +117,11 @@ gut wie nie eine größere Verschachtelungstiefe, weshalb wir diese zusätzliche
 * **Response**-Funktion:
   ```javascript
   function xyResponse(error, response, body) {
-      let dataObject = JSON.parse(body); // falls body JSON enthält
-      ...
+      // falls body JSON enthält (und nicht automatisch geparst wurde)
+      let dataObject = JSON.parse(body);
+    
+      // Status-Code der Antwort auslesen, z.B. auf 200 testen:
+      response.statusCode === 200
   }
   ```
   
@@ -114,5 +141,9 @@ gut wie nie eine größere Verschachtelungstiefe, weshalb wir diese zusätzliche
     let z = request.body.bodyName;   // für JSON-Daten im Body
     ...
     response.json(result); // zum Senden einer JSON-Antwort
+    ...
+    response.status(301);  // zum Setzen des HTTP-Status
+    ...
+    response.status(204).end();  // zum Senden einer leeren Antwort
   }
   ```
