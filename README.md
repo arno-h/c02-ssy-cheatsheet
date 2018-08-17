@@ -20,7 +20,7 @@
   * `{}` ... leeres Objekt
   * `var.key` ... mit Punkt auf Methoden und Attribute zugreifen
   * `var[key]` ... alternativ mit Array-Notation auf Attribute zugreifen
-  * `var.key = undefined` ... Wert aus Objekt entfernen/löschen
+  * `delete var.key` ... Wert aus Objekt entfernen/löschen
   * `Object.keys(var)` ... retourniert Array aller Keys des Objekts
 * **Einige Tests**:
   * Existiert eine Variable? `typeof var !== "undefined"`
