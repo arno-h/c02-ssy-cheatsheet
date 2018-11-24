@@ -1,5 +1,10 @@
 # Kurz-Referenz für SSY-LV
 
+## NPM
+* `npm install` ... installiert die Dependencies (die Module die zum Ausführen benötigt werden)
+* `npm run start` ... startet die Applikation, nachträgliche Code-Änderungen werden nicht nachgeladen. Die Applikation ist dann über http://localhost:3000 erreichbar
+* `npm run monitor` ... startet die Applikation, bei Code-Änderungen wird die Anwendung neu gestartet
+
 ## JavaScript
 
 * **Variable**
