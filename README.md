@@ -2,7 +2,7 @@
 
 ## NPM
 * `npm install` ... installiert die Dependencies (die Module die zum Ausführen benötigt werden)
-* `npm run start` ... startet die Applikation, nachträgliche Code-Änderungen werden nicht nachgeladen. Die Applikation ist dann über http://localhost:3000 erreichbar
+* `npm run start` ... startet die Applikation, nachträgliche Code-Änderungen werden nicht nachgeladen. Die Applikation ist dann über http://localhost:3000/ erreichbar.
 * `npm run monitor` ... startet die Applikation, bei Code-Änderungen wird die Anwendung neu gestartet
 
 ## JavaScript
@@ -88,6 +88,9 @@ Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeiche
   * `collection.remove(var)` ... Eintrag auf Kollektion löschen
     (muss Objekt selbst sein, keine ID → vorher mit `.get()` Objekt aus DB holen)
   * `collection.update(var)` ... Eintrag einer Kollektion aktualisieren (Objekte vorher mit `get()` auslesen)
+* **Find**
+  * `collection.find({key: value, key2: value2, ...})` ... Liefert alle Objekte
+    zurück, bei denen *key=value* und *key2=value2* ist.
 * **Where**
   * `collection.where(function)` ... Liefert alle Objekte zurück, bei denen *function* *true* retourniert;
     Beispiel:
