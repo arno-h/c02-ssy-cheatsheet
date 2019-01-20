@@ -90,9 +90,9 @@ Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeiche
   * `collection.update(var)` ... Eintrag einer Kollektion aktualisieren (Objekte vorher mit `get()` auslesen)
 * **Find**
   * `collection.find({key: value, key2: value2, ...})` ... Liefert alle Objekte
-    zurück, bei denen *key=value* und *key2=value2* ist.
+    zurück, bei denen *key = value* und *key2=value2* ist.
   * `collection.find({'key': { '$ne' : 'value' }});` ... Liefert alle Objekte
-    zurück, bei denen *key!=value* ist. `$ne`
+    zurück, bei denen *key != value* ist. `$ne`
   * `collection.find({'key': {'$gt': 40}})` ... Liefert alle Objekte
     zurück, bei denen *key > 40* ist. `$gt`
   * `collection.find({'key': {'$gte': 40}})` ... Liefert alle Objekte
@@ -106,7 +106,7 @@ Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeiche
   * `collection.find({ 'key' : { '$in' : ['value', 'value2'] } })` ... Liefert alle Objekte
     zurück, bei denen *key value oder value2* ist. `$in`
   * `collection.find({ 'key' : { '$nin' : ['value', 'value2'] } })` ... Liefert alle Objekte
-    zurück, bei denen *key nicht value oder value2* ist. `$nin`
+    zurück, bei denen *key **nicht** value oder value2* ist. `$nin`
 * **Where**
   * `collection.where(function)` ... Liefert alle Objekte zurück, bei denen *function* *true* retourniert;
     Beispiel:
