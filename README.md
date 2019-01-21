@@ -34,7 +34,7 @@
 * **Schleifen**:
   * `for (let i = 0; i < arrVar.length; i++) { let value=arrVar[i]; ... }`
   * `for (let value of arrVar) { ... }` ... weist den Wert direkt der Variable zu
-  * `for {let key in object) { let value=object[key] }` zur Iteration über Objekt-Attribute (Keys)
+  * `for (let key in object) { let value=object[key] }` zur Iteration über Objekt-Attribute (Keys)
     (Gefährlich: listet auch geerbte Properties/Keys auf!)
   
 ### Verschachtelung
