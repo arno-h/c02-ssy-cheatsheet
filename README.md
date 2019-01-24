@@ -2,7 +2,8 @@
 
 ## NPM
 * `npm install` ... installiert die Dependencies (die Module die zum Ausführen benötigt werden)
-* `npm run start` ... startet die Applikation, nachträgliche Code-Änderungen werden nicht nachgeladen. Die Applikation ist dann über http://localhost:3000/ erreichbar.
+* `npm run start` ... startet die Applikation, nachträgliche Code-Änderungen werden nicht nachgeladen.
+  Die Applikation ist dann über http://127.0.0.1:3000/ erreichbar.
 * `npm run monitor` ... startet die Applikation, bei Code-Änderungen wird die Anwendung neu gestartet
 
 ## JavaScript
@@ -23,20 +24,31 @@
 * **Objekt** (bzw. Key-/Value-Map)
   * `{ key1: "Wert1", key2: 7, key3: true }` ... Definition eines neuen Objekts
   * `{}` ... leeres Objekt
-  * `var.key` ... mit Punkt auf Methoden und Attribute zugreifen
-  * `var[key]` ... alternativ mit Array-Notation auf Attribute zugreifen
+  * `var.key` ... mit Punkt auf Methoden und Attribute zugreifen (*key* ist ein *Name*)
+  * `var[key]` ... alternativ mit Array-Notation auf Attribute zugreifen (*key* ist *Variable*, die Namen enthält)
   * `delete var.key` ... Wert aus Objekt entfernen/löschen
   * `Object.keys(var)` ... retourniert Array aller Keys des Objekts
 * **Einige Tests**:
-  * Existiert eine Variable? `typeof var !== "undefined"`
+  * Existiert eine Variable? `typeof var !== "undefined"` oder `var === undefined`
   * Array leer? `arrVar.length === 0`
-  * Existiert Objektattribut (Key)? `"key" in var` oder `typeof var.key !== "undefined"`
+  * Existiert Objektattribut (Key)? `"key" in var` oder (wie oben) `var.key === undefined`
 * **Schleifen**:
   * `for (let i = 0; i < arrVar.length; i++) { let value=arrVar[i]; ... }`
   * `for (let value of arrVar) { ... }` ... weist den Wert direkt der Variable zu
   * `for (let key in object) { let value=object[key] }` zur Iteration über Objekt-Attribute (Keys)
     (Gefährlich: listet auch geerbte Properties/Keys auf!)
-  
+* **Mathematik und Strings**:
+  * `Math.max(a,b)` ... Maximum von *a* und *b*
+  * `Math.min(a,b)` ... Minimum von *a* und *b*
+  * `Math.round(a)` ... gerundete (Integer-)Zahl
+  * `parseFloat(strVar)` ... retourniert eine Gleitkommazahl
+  * `parseInt(strVar)` ... retourniert eine Ganzzahl
+* **Zeitverzögerung**
+  * `setTimeout(func, msec, arg1, arg2, ...)` ... ruft die Funktion *func* in *msec* Millisekunden mit den
+    Parametern *arg1*, *arg2* etc. auf. Auf Variablen aus der Umgebung (siehe Verschachtelung unten) kann
+    weiterhin zugegriffen werden.
+
+
 ### Verschachtelung
 
 Manchmal ist es notwendig, Variablen über Request-Grenzen hinweg weiterzureichen.
@@ -132,7 +144,7 @@ Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeiche
       let dataObject = JSON.parse(body);
     
       // Status-Code der Antwort auslesen, z.B. auf 200 testen:
-      response.statusCode === 200
+      response.statusCode == 200
   }
   ```
   
