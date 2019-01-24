@@ -89,8 +89,11 @@ Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeiche
     (muss Objekt selbst sein, keine ID → vorher mit `.get()` Objekt aus DB holen)
   * `collection.update(var)` ... Eintrag einer Kollektion aktualisieren (Objekte vorher mit `get()` auslesen)
 * **Find**
-  * `collection.find({key: value, key2: value2, ...})` ... Liefert alle Objekte
-    zurück, bei denen *key=value* und *key2=value2* ist.
+  * `collection.find({key: value, key2: value2, ...})` ... Liefert *alle* Objekte
+    zurück, bei denen *key=value* und *key2=value2* ist. Ergebnis ist ein *Array*.
+  * `collection.findOne({key: value, key2: value2, ...})` ... Liefert *ein*
+    Objekt zurück, bei dem *key=value* und *key2=value2* ist. Ergebnis ist
+    *null* (nichts gefunden) oder der erste/einzige Treffer.
 * **Where**
   * `collection.where(function)` ... Liefert alle Objekte zurück, bei denen *function* *true* retourniert;
     Beispiel:
