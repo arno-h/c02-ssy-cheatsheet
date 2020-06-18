@@ -49,37 +49,6 @@
     weiterhin zugegriffen werden.
 
 
-### Verschachtelung
-
-Manchmal ist es notwendig, Variablen über Request-Grenzen hinweg weiterzureichen.
-Allerdings kann bei der Response-Funktion kein zusätzlicher Parameter mitübergeben werden.
-Die Lösung ist, die Funktionen ineinander zu verschachteln:
-
-```javascript
-function func1(param1) {
-    let var1 = 1;
-    func2();      // ohne Parameter
-
-    function func2() {  // verschachtelt
-        let var2 = 2;
-        func3();  // ohne Parameter
-
-        function func3() {  // weiter verschachtelt
-            // hier Zugriff auf alle Variable möglich
-            console.log(param1, var1, var2);
-            // Achtung: Falls func1, func2 oder func3 gleiche Parameternamen haben
-            // dann wird letzte Definition verwendet --> verwenden Sie unterschiedliche
-            // Namen in allen Funktionen, um Fehler zu verhindern
-        }
-    }
-}
-```
-
-(Anmerkung: Da bei größeren Programmen die Verschachtelung stark zunehmen kann, haben sich im NodeJS-Ökosystem
-einige alternative Techniken etabliert: async, Promises etc. Für unsere Beispiele haben wir aber so
-gut wie nie eine größere Verschachtelungstiefe, weshalb wir diese zusätzlichen Bibliotheken nicht verwenden.)
-
-
 ## JSON
 
 Javascript ist die Muttersprache von JSON, weshalb die Notation auch so ähnlich aussieht.
@@ -88,6 +57,32 @@ Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeiche
 * `let var = JSON.parse(string)` ... dekodiert einen String und retourniert den Wert
                                      (kann Objekt, Array, Bool, String etc. sein)
 * `let string = JSON.stringify(var)` ... erzeugt einen JSON-String aus einer Variable 
+
+In unseren Programmen wird das Serialisieren bzw. Dekodieren aber meist automatisch
+vorgenommen.
+
+
+## Express: Routen
+
+* Anlegen:
+  ```javascript
+  router.get('/:varName', routeFunction);
+  router.post("/", routeFunction);
+  ```
+* Routen-Funktion
+  ```javascript
+  function routeFunction(request, response) {
+    let x = request.params.varName;   // selber Name wie in Route
+    let y = request.query.queryName;  // für http://...?queryName=123
+    let z = request.body.bodyName;    // für JSON-Daten im Body
+    ...
+    response.json(result); // zum Senden einer JSON-Antwort
+    ...
+    response.status(301);  // zum Setzen des HTTP-Status
+    ...
+    response.status(204).end();  // zum Senden einer leeren Antwort
+  }
+  ```
 
 
 ## LokiJS-Datenbank
@@ -115,58 +110,88 @@ Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeiche
     ```
 
 
-## Request 
+## HTTP-Requests mit Axios
+
+HTTP-Requests werden im JavaScript-Ökosystem asnychron verarbeitet.
+D.h. der Programmablauf fährt wie gewohnt fort, obwohl der Request bzw. insbesondere die
+Response noch nicht erhalten wurde. Stattdessen werden **Callbacks** (Funktionen, die
+aufgerufen werden, sobald die Response erhalten worden ist) verwendet. Callbacks sind
+aber in größeren Programmen unpraktisch, weshalb **Promises** (Versprechen) 
+und **async/await** in die Sprache eingeführt wurden.
+
+### Promise
+
+  ```javascript
+  axios.get(url)
+    .then(function(response) {
+      // wird ausgeführt, sobald Response erhalten wurde
+      ...
+    })
+    .catch(function(error) {
+      // wird im Fehlerfall ausgeführt (z.B. HTTP 404)
+      ...
+    })
+    .finally(function () {
+      // wird in beiden Fällen ausgeführt (zum Schluss)
+      ...
+    })
+  ```
+
+Es ist auch möglich, mehrere Requests parallel abzusetzen:
+
+  ```javascript
+  Promise.all([
+        axios.get(url1),
+        axios.get(url2),
+        axios.get(url3),
+    ])
+    .then(function(response) { ... })
+    .catch(function(error) { ... })
+    .finally(function () { ... })
+  ```
+
+### async/await
+
+
+  ```javascript
+  async function xy() {
+    try {
+        const response = await axios.get(url);
+        // an dieser Stelle ist Response verfügbar
+    } catch(error) {
+      // wird im Fehlerfall ausgeführt (z.B. HTTP 404)
+    } finally {
+      // wird immer zum Schluss ausgeführt
+    }   
+  }
+  ```
+
+### Requests
 
 * **GET/DELETE**: 
   ```javascript
-  Request.get(urlVar, responseFunction);
-  // In der Reponse-Funktion muss der body mit JSON.parse() eingelesen werden
-
-  // Alternativ (dann wird body automatisch geparst)
-  Request.get({
-      url: urlVar,
-      json: true
-    },
-    responseFunction);
+  axios.get(url, options);
+  axios.delete(url, options);
+  // options sind optional. Sie können z.B. URL-Query-Parameter enthalten,
+  // als Alternative zum manuellen Anhängen der Parameter in der URL:
+  // axios.get(url, { params: { ... } })
   ```
 * **POST/PUT/PATCH**: (wenn also Daten mitübergeben werden müssen)
   ```javascript
-  Request.put({
-      url: urlVar,
-      json: jsonVar
-    },
-    responseFunction);
+  axios.post(url, data, options);
+  axios.put(url, data, options);
+  axios.patch(url, data, options);
+  // data ist ein String oder ein gewöhnliches JavaScript-Objekt
+  // options sind optional
   ```
-* **Response**-Funktion:
-  ```javascript
-  function xyResponse(error, response, body) {
-      // falls body JSON enthält (und nicht automatisch geparst wurde)
-      let dataObject = JSON.parse(body);
-    
-      // Status-Code der Antwort auslesen, z.B. auf 200 testen:
-      response.statusCode == 200
-  }
-  ```
-  
-  
-## Express: Routen
-
-* Anlegen:
-  ```javascript
-  router.get('/:varName', routeFunction);
-  router.post("/", routeFunction);
-  ```
-* Routen-Funktion
-  ```javascript
-  function routeFunction(request, response) {
-    let x = request.params.varName;   // selber Name wie in Route
-    let y = request.query.queryName; // für http://...?queryName=123
-    let z = request.body.bodyName;   // für JSON-Daten im Body
-    ...
-    response.json(result); // zum Senden einer JSON-Antwort
-    ...
-    response.status(301);  // zum Setzen des HTTP-Status
-    ...
-    response.status(204).end();  // zum Senden einer leeren Antwort
-  }
-  ```
+* **Response**:
+  Die wichtigsten Felder in der Response sind:
+  * `response.status`: HTTP-Code, z.B. 200, 404
+  * `response.statusText`: HTTP-Statustext, z.B. "OK", "Not found"
+  * `response.data`: der Body der Response (gleich als Javascript-Objekt)
+  * `response.config`: die ursprünglichen Daten des Requests (z.B. `config.url`)
+* **Error**:
+  Die wichtigsten Felder im Error-Objekt sind alle in `error.response` enthalten.
+  Es hat die selben Felder wie in der Response oben beschrieben,
+  z.B. `error.response.status` oder `error.response.data`.
+ 
