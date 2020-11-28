@@ -2,7 +2,7 @@
 
 ## NPM
 * `npm install` ... installiert die Dependencies (die Module die zum Ausführen benötigt werden)
-* `npm run start` ... startet die Applikation, nachträgliche Code-Änderungen werden nicht nachgeladen.
+* `npm start` ... startet die Applikation, nachträgliche Code-Änderungen werden nicht nachgeladen.
   Die Applikation ist dann über http://127.0.0.1:3000/ erreichbar.
 * `npm run monitor` ... startet die Applikation, bei Code-Änderungen wird die Anwendung neu gestartet
 
@@ -49,19 +49,6 @@
     weiterhin zugegriffen werden.
 
 
-## JSON
-
-Javascript ist die Muttersprache von JSON, weshalb die Notation auch so ähnlich aussieht.
-Wesentlicher Unterschied: Bei JSON werden die Keys zwingend in Anführungszeichen >"< gesetzt.
-
-* `let var = JSON.parse(string)` ... dekodiert einen String und retourniert den Wert
-                                     (kann Objekt, Array, Bool, String etc. sein)
-* `let string = JSON.stringify(var)` ... erzeugt einen JSON-String aus einer Variable 
-
-In unseren Programmen wird das Serialisieren bzw. Dekodieren aber meist automatisch
-vorgenommen.
-
-
 ## Express: Routen
 
 * Anlegen:
@@ -105,8 +92,8 @@ vorgenommen.
   * `collection.where(function)` ... Liefert alle Objekte zurück, bei denen *function* *true* retourniert;
     Beispiel:
     ```javascript
-    collection.where(hat4Beine);
-    function hat4Beine(obj) { return (obj.beine == 4); }
+    collection.where(hat4oderMehrBeine);
+    function hat4oderMehrBeine(obj) { return (obj.beine >= 4); }
     ```
 
 
