@@ -48,6 +48,31 @@
     Parametern *arg1*, *arg2* etc. auf. Auf Variablen aus der Umgebung (siehe Verschachtelung unten) kann
     weiterhin zugegriffen werden.
 
+### Verschachtelung
+
+Manchmal ist es notwendig lokale Variablen in anderen Funktionen sichtbar zu machen, ohne
+dass die Variable als Parameter übergeben werden kann. Die Lösung ist, die Funktionen
+ineinander zu verschachteln:
+
+```javascript
+function func1(param1) {
+    let var1 = 1;
+    func2();      // ohne Parameter
+
+    function func2() {  // verschachtelt
+        let var2 = 2;
+        func3("value");  // ein Beispiel-Parameter
+
+        function func3(value) {  // weiter verschachtelt
+            // hier Zugriff auf alle Variable möglich
+            console.log(param1, var1, var2, value);
+            // Achtung: Falls func1, func2 oder func3 gleiche Parameternamen haben
+            // dann wird letzte Definition verwendet --> verwenden Sie unterschiedliche
+            // Namen in allen Funktionen, um Fehler zu verhindern
+        }
+    }
+}
+```
 
 ## Express: Routen
 
